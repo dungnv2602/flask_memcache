@@ -22,7 +22,7 @@ def index():
     return render_template('task_list/index.html', tasks=tasks)
 
 
-@bp.route('/<int:id>/delete', methods=['DELETE'])
+@bp.route('/<int:id>/delete', methods=['POST'])
 def delete(id):
     task = Task.query.get(id)
     if task is not None:

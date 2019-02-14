@@ -36,7 +36,7 @@
               <!-- Delete Button -->
               <td>
                 <form action="{{ url_for('task_list.delete', id=task['id']) }}"
-                      method="DELETE">
+                      method="POST">
                   <button type="submit" class="btn btn-danger">
                     <i class="fa fa-trash"></i> Delete
                   </button>
