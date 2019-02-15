@@ -7,8 +7,12 @@ from task_list.models import Task
 
 bp = Blueprint('task_list', __name__)
 
+'''Cache the entire view. Since we only want to cache the result of the index() function when we GET the view,
+ we exclude the POST request with the unless parameter'''
+
 
 @bp.route('/', methods=('GET', 'POST'))
+@cache.cached(unless=(request.method == 'POST'))
 def index():
     if request.method == 'POST':
         name = request.form['name']
@@ -19,6 +23,7 @@ def index():
             db.session.commit()
             # clear cache
             cache.delete_memoized(get_all_tasks)
+            cache.delete('view//')  # delete the cached view
 
     tasks = get_all_tasks()
     return render_template('task_list/index.html', tasks=tasks)
@@ -32,6 +37,7 @@ def delete(id):
         db.session.commit()
         # clear cache
         cache.delete_memoized(get_all_tasks)
+        cache.delete('view//')  # delete the cached view
     return redirect(url_for('task_list.index'))
 
 
