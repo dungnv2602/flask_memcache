@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, redirect, render_template, request, url_for
+    Blueprint, flash, redirect, render_template, request, url_for, session
 )
 
 from task_list import db, cache
@@ -38,3 +38,11 @@ def delete(id):
 @cache.memoize()
 def get_all_tasks():
     return Task.query.all()
+
+
+def demo_using_session():
+    '''
+    Our task list app does not have any use for sessions but we can now use sessions like so
+    '''
+    session['key'] = 'value'
+    session.get('key')  # default to None
