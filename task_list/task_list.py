@@ -17,11 +17,16 @@ def index():
         else:
             db.session.add(Task(name=name))
             db.session.commit()
+            # clear cache
+            cache.delete('all_tasks')
 
+    # check if query already in cache
     tasks = cache.get('all_tasks')
+    # if not -> set in cache
     if tasks is None:
         tasks = Task.query.all()
         cache.set('all_tasks', tasks)
+
     return render_template('task_list/index.html', tasks=tasks)
 
 
@@ -31,4 +36,6 @@ def delete(id):
     if task is not None:
         db.session.delete(task)
         db.session.commit()
+        # clear cache
+        cache.delete('all_tasks')
     return redirect(url_for('task_list.index'))
