@@ -7,12 +7,15 @@ from task_list.models import Task
 
 bp = Blueprint('task_list', __name__)
 
-'''Cache the entire view. Since we only want to cache the result of the index() function when we GET the view,
+
+def is_post():
+    '''Cache the entire view. Since we only want to cache the result of the index() function when we GET the view,
  we exclude the POST request with the unless parameter'''
+    return (request.method == 'POST')
 
 
 @bp.route('/', methods=('GET', 'POST'))
-@cache.cached(unless=(request.method == 'POST'))
+@cache.cached(unless=is_post)
 def index():
     if request.method == 'POST':
         name = request.form['name']
